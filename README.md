@@ -8,3 +8,4 @@ Gracias por confiar en este proyecto.
 
 - VHDL: Archivos de ejemplo del canal para VHDL (Lenguaje de descripción de Hardware)
 - MODBUS: Archivos ejemplo para protocolo MODBUS. 
+- --ESP32
