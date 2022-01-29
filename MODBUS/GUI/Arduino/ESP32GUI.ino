@@ -31,8 +31,8 @@ void setup() {
     Serial.println(WiFi.localIP());
     pinMode(LED,OUTPUT);//LED como salida
     mb.server();    //Comenzar el ESP32 en modo servidor
-    mb.addIreg(SENSOR_IREG); //Crear registro en la direccion seleccionada (100)
-    mb.addCoil(Coil);
+    mb.addIreg(SENSOR_IREG); //Crear registro (input register) en la direccion seleccionada (100)-para Funcion (04) modbus
+    mb.addCoil(Coil);//Agregar coil en dirección 101-para función (05) modbus
     ts = millis();
 }
 
@@ -40,10 +40,10 @@ void loop() {
    //Call once inside loop() - all magic here
    mb.task();
 
-   //Cada dos segundo actualizar el valor del registro con el valor del conversor análogo digital
+   //Cada segundo actualizar el valor del registro con el valor del conversor análogo digital
    if (millis() > ts + 1000) {
        ts = millis();
-       float sensor=analogRead(A0);
+       float sensor=analogRead(A0);//Lectura de canal ADC0 en ESP32-la lectura esta en formato de 12 bits (ADC 12 bits-0:4095)
        mb.Ireg(SENSOR_IREG, round(sensor)); //Aquí guardo el valor de la variable en el registro SENSOR_IREG. Este registro luego es leido por el software Modbus poll 
    }
    digitalWrite(LED, mb.Coil(Coil));
