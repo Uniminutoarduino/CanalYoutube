@@ -8,3 +8,4 @@ Gracias por confiar en este proyecto.
 
 - VHDL: Archivos de ejemplo del canal para VHDL (Lenguaje de descripción de Hardware)
 - MODBUS: Archivos ejemplo para protocolo MODBUS. Subcarpeta *ESP32*: Archivo para convertir variador de velocidad Modbus RTU (Serial) en modbus (TCP/IP). Subcarpeta *GUI*: Archivos     en lenguaje Java, Python y Basic para ejemplo de interfaz gráfica para protocolo Modbus
+- Raspberry Pi/Pico: Scripts para Raspberry Pi y Raspberry Pi pico
