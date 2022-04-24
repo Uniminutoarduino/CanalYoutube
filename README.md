@@ -2,7 +2,7 @@
 
 En este repositorio se encuentrán los códigos de mi canal (TalosElectrónico)-(https://www.youtube.com/channel/UCtdB11VshaVg9xbfbhNZryg)
 
-Gracias por confiar en este proyecto.
+Gracias por confiar y apoyar en este proyecto con sus visitas y comentarios.
 
 ## Descripción de carpetas
 
