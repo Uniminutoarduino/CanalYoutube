@@ -1,0 +1,2 @@
+1. Para abrir el proyecto de TIA portal V15, descomprimir el archivo ComunicaciónTCPV1. 
+2. Para el Script en Python, abrir el archivo TCPOpenComm desde el entorno JetBrains PyCharm o desde IDLE de Python directamente. Script compatible com Python >=2.7
