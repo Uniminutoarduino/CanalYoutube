@@ -1,0 +1,103 @@
+<html>
+<title>PlotlyESP32</title>
+<head>
+<!--Agregar MetroUI4 framework-->
+<link rel="stylesheet" href="https://cdn.korzh.com/metroui/v4/css/metro-all.min.css">
+<!--Agregar Plotly para gráficar-->
+<script src="https://cdn.plot.ly/plotly-2.16.1.min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Ejemplo ESP32 Plotly.js</h1>
+
+<div id="myDiv" style="border: 10px; border-color: blue;"></div>
+
+<button class="button primary" onclick="OpcionWebsocket('1')">Abrir Conexión</button>
+<button class="button alert" onclick="OpcionWebsocket('2')">Cerrar Conexión</button>
+
+<script>
+
+var WebSocketm=new WebSocket("ws://192.168.0.101:8003")//Crear websocket para comunicarse con la IP del servidor y el puerto
+var datos;
+var block=0;
+var OpcionWebsocketv='0';
+var IntervaloEnvio;//Objeto con el tiempo de intervalo entre peticiones para ESP32
+var DatosSHT31=[]; //Array para almacenar datos leidos de ESP32 (Temperatura, Humedad)
+var coma = ",";
+
+function OpcionWebsocket(opcion){//Inicia la comunicación con ESP32. 1 abre conexión, 2 cierra conexión
+  OpcionWebsocketv=opcion;
+  if(OpcionWebsocketv=='1'){
+    IntervaloEnvio=setInterval(EnviarDatos,2000)//Recibir datos cada dos segundos del servidor
+  }else{
+    clearInterval(IntervaloEnvio);
+  }
+
+}
+
+ function EnviarDatos(){//Envia valor de opción a ESP32 para abrir o cerrar conexión y transmisión de datos
+    WebSocketm.send(OpcionWebsocketv);
+    console.log("Enviando...");
+  }
+ 
+
+
+WebSocketm.onmessage=(event) => {//Si hay mensaje de echo del ESP32, guardar datos.
+    console.log(event.data);
+    datos=event.data;
+    DatosSHT31=datos.split(coma);//Dividir el arreglo divido en dos partes, el separados es coma
+    console.log(DatosSHT31[0]);//Imprimir los valores leidos de temperatura y humedad
+    console.log(DatosSHT31[1]);
+    block=1;
+}
+
+function ObtenerTemperatura(){//Obtener temperatura
+    return parseFloat(DatosSHT31[0]); //Retornar datos leidos desde Servidor ESP32 o Python
+}
+
+function ObtenerHumedad(){//Obtener Humedad
+    return parseFloat(DatosSHT31[1]); //Retornar datos leidos desde Servidor ESP32 o Python
+}
+
+
+/*Plotly.newPlot("myDiv", [{
+  y: [1,2,3].map(ObtenerDatos),
+  mode: 'lines',
+  line: {color: '#80CAF6'}
+}]);*/
+//Configuracion de los plots. 
+Plotly.newPlot('myDiv', [{
+  y: [1,2,3].map(ObtenerTemperatura),
+  mode: 'lines+markers', 
+  marker: {color: 'pink', size: 8},
+  line: {width: 4}
+}, {
+  y: [1,2].map(ObtenerHumedad),
+  mode: 'lines+markers',
+  marker: {color: 'gray', size:8},
+  line: {width: 4}
+}]);
+
+//Configurar intervalo en el cual se muestran los datos en la gráfica en este caso cada 300ms
+var cnt=0;
+var interval = setInterval(function() {
+if(block==1){
+  block=0;//Colocar la variable de desbloqueo de datos en cero. Esta variable se usa para graficar una muestra solo cuando se reciba.
+  Plotly.extendTraces('myDiv', {
+    y: [[ObtenerTemperatura()],[ObtenerHumedad()]]
+  }, [0,1])
+}
+
+/*if(++cnt === 100){
+  clearInterval(interval);
+  cnt=0;
+}*/
+}, 300);
+
+</script>
+
+<script src="https://cdn.korzh.com/metroui/v4/js/metro.min.js"></script>
+</body>
+</html>
